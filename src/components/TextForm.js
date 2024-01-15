@@ -1,29 +1,51 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 
 export default function TextForm(props) {
-
-  const handleUpClick = ()=>{
+  const handleUpClick = () => {
     // console.log("Uppercase was clicked");
     let newText = text.toUpperCase();
-    setText(newText)
-  }
+    setText(newText);
+  };
 
-  const handleOnChange = (event)=>{
+  const handleLoClick = () => {
+    let newText = text.toLowerCase();
+    setText(newText);
+  };
+
+  const handleOnChange = (event) => {
     // console.log("On-change");
-    setText(event.target.value)
-  }
+    setText(event.target.value);
+  };
 
-  // Hook 
-  const [text, setText] = useState('Enter text here');
-  // text = "New text"; //Wrong way to change the state
-  // setText("New text"); //Write way to change the state
+  // Hook
+  const [text, setText] = useState("");
   return (
-    <div>
-      <h1>{props.heading}</h1>
-      <div className="mb-3">
-        <textarea className="form-control" onChange={handleOnChange} value={text} id="myBox" rows="7"></textarea>
+    <>
+      <div>
+        <h1>{props.heading}</h1>
+        <div className="mb-3">
+          <textarea
+            className="form-control"
+            onChange={handleOnChange}
+            value={text}
+            id="myBox"
+            rows="7"
+          ></textarea>
+        </div>
+        <button className="btn btn-primary mx-2" onClick={handleUpClick}>
+          Convert to Uppercase
+        </button>
+        <button className="btn btn-primary" onClick={handleLoClick}>
+          Convert to Lowercase
+        </button>
       </div>
-      <button className="btn btn-primary" onClick={handleUpClick}>Convert to Uppercase</button>
-    </div>
+      <div className="container my-3">
+        <h2>Your Text Summary</h2>
+        <p>{text.split(" ").length - 1} words and {text.length} characters</p>
+        <p>{0.008 * (text.split(" ").length-1)} Minutes read</p>
+        <h2>Preview</h2>
+        <p>{text}</p>
+      </div>
+    </>
   );
 }
