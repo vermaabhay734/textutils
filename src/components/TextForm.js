@@ -17,7 +17,7 @@ export default function TextForm(props) {
   const handleClearText = () => {
     let newText = "";
     setText(newText);
-    props.showAlert("Text has been Cleared!", "success")
+    props.showAlert("Text Cleared!", "success")
   };
 
   const handleOnChange = (event) => {
@@ -28,13 +28,13 @@ export default function TextForm(props) {
     var text = document.getElementById("myBox");
     text.select();
     navigator.clipboard.writeText(text.value);
-    props.showAlert("Text has been Copied!", "success")
+    props.showAlert("Copied to Clipboard!", "success")
   };
 
   const handleExtraSpace = () => {
     let newText = text.split(/[ ]+/);
     setText(newText.join(" "));
-    props.showAlert("Extra Space has been removed!", "success")
+    props.showAlert("Extra Spaces removed!", "success")
   };
 
   // Hook

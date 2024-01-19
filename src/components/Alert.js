@@ -11,12 +11,12 @@ function Alert(props) {
       className={`alert alert-${props.alert.type} alert-dismissible fade show`}
       role="alert"
     ><strong>{capitalize(props.alert.type)}</strong>: {props.alert.msg}
-      <button
+      {/* <button
         type="button"
         className="btn-close"
         data-bs-dismiss="alert"
         aria-label="Close"
-      ></button>
+      ></button> */}
     </div>
   );
 }
