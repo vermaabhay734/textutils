@@ -26,12 +26,6 @@ function App() {
       document.body.style.backgroundColor = "#042743";
       showAlert("Dark mode has been enabled", "success");
       document.title = "TextUtils - DarkMode";
-      // setInterval(() => {
-      //   document.title = "TextUtils - Downlaod Now";
-      // }, 1500);
-      // setInterval(() => {
-      //   document.title = "TextUtils is great";
-      // }, 2000);
     } else {
       setMode("light");
       document.body.style.backgroundColor = "white";
