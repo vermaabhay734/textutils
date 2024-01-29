@@ -2,22 +2,21 @@ import React, { useState } from "react";
 
 export default function TextForm(props) {
   const handleUpClick = () => {
-    // console.log("Uppercase was clicked");
     let newText = text.toUpperCase();
     setText(newText);
-    props.showAlert("Converted to UPPERCASE!", "success")
+    props.showAlert("Converted to UPPERCASE!", "success");
   };
 
   const handleLoClick = () => {
     let newText = text.toLowerCase();
     setText(newText);
-    props.showAlert("Converted to lowercase!", "success")
+    props.showAlert("Converted to lowercase!", "success");
   };
 
   const handleClearText = () => {
     let newText = "";
     setText(newText);
-    props.showAlert("Text Cleared!", "success")
+    props.showAlert("Text Cleared!", "success");
   };
 
   const handleOnChange = (event) => {
@@ -28,17 +27,31 @@ export default function TextForm(props) {
     var text = document.getElementById("myBox");
     text.select();
     navigator.clipboard.writeText(text.value);
-    props.showAlert("Copied to Clipboard!", "success")
+    props.showAlert("Copied to Clipboard!", "success");
   };
 
   const handleExtraSpace = () => {
     let newText = text.split(/[ ]+/);
     setText(newText.join(" "));
-    props.showAlert("Extra Spaces removed!", "success")
+    props.showAlert("Extra Spaces removed!", "success");
   };
 
-  // Hook
+  const findEmails = () => {
+    const emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g;
+    const matches = text.match(emailRegex);
+
+    if (matches) {
+      setEmails(matches);
+      props.showAlert(`Found Email Addresses!`, 'info');
+    } else {
+      setEmails([]);
+      props.showAlert('No email addresses found in the text.', 'info');
+    }
+  };
+
   const [text, setText] = useState("");
+  const [emails, setEmails] = useState([]);
+
   return (
     <>
       <div
@@ -74,6 +87,10 @@ export default function TextForm(props) {
         <button className="btn btn-primary mx-1 my-1" onClick={handleExtraSpace}>
           Remove Extra Space
         </button>
+        {/* Add the Email ID Finder Button */}
+        <button className="btn btn-primary mx-1 my-1" onClick={findEmails}>
+          Find Email Addresses
+        </button>
       </div>
       <div
         className="container my-3"
@@ -81,12 +98,26 @@ export default function TextForm(props) {
       >
         <h2>Your Text Summary</h2>
         <p>
-          {text.split(" ").filter((element)=>{return element.length!=0}).length} words and {text.length} characters
+          {text.split(" ").filter((element) => element.length !== 0).length} words and {text.length} characters
         </p>
         <p>{0.008 * (text.split(" ").length - 1)} Minutes read</p>
         <h2>Preview</h2>
-        <p>{text.length>0?text:"Enter something in the textbox above to preview it here. "}</p>
+        <p>{text.length > 0 ? text : "Enter something in the textbox above to preview it here. "}</p>
       </div>
+      {/* Conditional Rendering of Found Email Addresses Section */}
+      {emails.length > 0 && (
+        <div
+          className="container my-3"
+          style={{ color: props.mode === "dark" ? "white" : "#042743" }}
+        >
+          <h2>Found Email Addresses</h2>
+          <ul>
+            {emails.map((email, index) => (
+              <li key={index}>{email}</li>
+            ))}
+          </ul>
+        </div>
+      )}
     </>
   );
 }
