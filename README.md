@@ -19,6 +19,9 @@ TextUtils is a React-based web app designed to help users analyze and manipulate
 - **Reading Time Estimation:**
   - Estimate the time required to read the provided text.
 
+- **Email Address Finder:**
+  - Identify and display email addresses present in the text.
+
 - **Preview Feature:**
   - Preview how the text will appear before making changes.
 
