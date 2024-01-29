@@ -24,9 +24,7 @@ export default function TextForm(props) {
   };
 
   const handleCopy = () => {
-    var text = document.getElementById("myBox");
-    text.select();
-    navigator.clipboard.writeText(text.value);
+    navigator.clipboard.writeText(text);
     props.showAlert("Copied to Clipboard!", "success");
   };
 
@@ -87,7 +85,6 @@ export default function TextForm(props) {
         <button className="btn btn-primary mx-1 my-1" onClick={handleExtraSpace}>
           Remove Extra Space
         </button>
-        {/* Add the Email ID Finder Button */}
         <button className="btn btn-primary mx-1 my-1" onClick={findEmails}>
           Find Email Addresses
         </button>
@@ -98,9 +95,9 @@ export default function TextForm(props) {
       >
         <h2>Your Text Summary</h2>
         <p>
-          {text.split(" ").filter((element) => element.length !== 0).length} words and {text.length} characters
+          {text.split(/\s+/).filter((element) => element.length !== 0).length} words and {text.length} characters
         </p>
-        <p>{0.008 * (text.split(" ").length - 1)} Minutes read</p>
+        <p>{0.008 * (text.split(/\s+/).filter((element) => element.length !== 0).length)} Minutes read</p>
         <h2>Preview</h2>
         <p>{text.length > 0 ? text : "Enter something in the textbox above to preview it here. "}</p>
       </div>
