@@ -35,6 +35,12 @@ TextUtils is a React-based web app designed to help users analyze and manipulate
 3. Use the various buttons and features to analyze and modify the text as needed.
 4. Toggle between dark mode and light mode using the dedicated button.
 
+
+## Portfolio Snapshot
+![Portfolio Snapshot](./src/images/textutils-dark.png)
+<!-- ![Portfolio Snapshot](./src/images/testutils-light.png) -->
+
+
 ## How to Contribute
 
 If you would like to contribute to TextUtils, follow these steps:
@@ -54,9 +60,11 @@ If you would like to contribute to TextUtils, follow these steps:
 
 Feel free to explore the TextUtils web app and enjoy analyzing and manipulating text effortlessly! If you encounter any issues or have suggestions for improvement, don't hesitate to contribute or reach out.
 
-## Contact
+## Introduction 👋
+Hey there! I'm Abhay Verma, a passionate web developer. 
+My mission? Crafting pixel-perfect websites that make users go "Wow!" 🌟
 
-For any inquiries or feedback, you can reach me at:
-
-- GitHub: [vermaabhay734](https://github.com/vermaabhay734)
-- Email: vermaabhay734@gmail.com
+- **Name**: Abhay Verma
+- **LinkedIn**: [Connect with me](https://www.linkedin.com/in/vermaabhay734/)
+- **GitHub**: [Check out my GitHub](https://github.com/vermaabhay734)
+- **Portfolio**: [Abhay Verma](https://vermaabhay734.github.io/abhay/)
