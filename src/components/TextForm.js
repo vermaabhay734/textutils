@@ -1,26 +1,54 @@
-import React, { useState } from "react";
+
+import React, { useState, useRef } from "react";
 
 export default function TextForm(props) {
+  // Utility functions
+  function removeCodeComments(str) {
+    let out = str.replace(/(^|\s)\/\/.*$/gm, "");
+    out = out.replace(/\/\*[\s\S]*?\*\//gm, "");
+    out = out.replace(/<!--([\s\S]*?)-->/gm, "");
+    return out;
+  }
+
+  function minifyCode(str) {
+    let out = removeCodeComments(str);
+    out = out.replace(/\s+/g, " ");
+    out = out.replace(/>\s+</g, "><");
+    return out.trim();
+  }
+
+  const [text, setText] = useState("");
+  const [emails, setEmails] = useState([]);
+  const undoStack = useRef([]);
+  const redoStack = useRef([]);
+
   const handleUpClick = () => {
+    undoStack.current.push(text);
     let newText = text.toUpperCase();
     setText(newText);
     props.showAlert("Converted to UPPERCASE!", "success");
+    redoStack.current = [];
   };
 
   const handleLoClick = () => {
+    undoStack.current.push(text);
     let newText = text.toLowerCase();
     setText(newText);
     props.showAlert("Converted to lowercase!", "success");
+    redoStack.current = [];
   };
 
   const handleClearText = () => {
-    let newText = "";
-    setText(newText);
+    undoStack.current.push(text);
+    setText("");
     props.showAlert("Text Cleared!", "success");
+    redoStack.current = [];
   };
 
   const handleOnChange = (event) => {
+    undoStack.current.push(text);
     setText(event.target.value);
+    redoStack.current = [];
   };
 
   const handleCopy = () => {
@@ -29,15 +57,58 @@ export default function TextForm(props) {
   };
 
   const handleExtraSpace = () => {
+    undoStack.current.push(text);
     let newText = text.split(/[ ]+/);
     setText(newText.join(" "));
     props.showAlert("Extra Spaces removed!", "success");
+    redoStack.current = [];
+  };
+
+  const handleRemoveBlankLines = () => {
+    undoStack.current.push(text);
+    let newText = text.split(/\r?\n/).filter(line => line.trim() !== '').join('\n');
+    setText(newText);
+    props.showAlert("Blank lines removed!", "success");
+    redoStack.current = [];
+  };
+
+  const handleRemoveComments = () => {
+    undoStack.current.push(text);
+    const newText = removeCodeComments(text);
+    setText(newText);
+    props.showAlert("Code comments removed!", "success");
+    redoStack.current = [];
+  };
+
+  const handleMinifyCode = () => {
+    undoStack.current.push(text);
+    const newText = minifyCode(text);
+    setText(newText);
+    props.showAlert("Code minified!", "success");
+    redoStack.current = [];
+  };
+
+  const handleUndo = () => {
+    if (undoStack.current.length > 0) {
+      redoStack.current.push(text);
+      const prev = undoStack.current.pop();
+      setText(prev);
+      props.showAlert("Undo performed!", "info");
+    }
+  };
+
+  const handleRedo = () => {
+    if (redoStack.current.length > 0) {
+      undoStack.current.push(text);
+      const next = redoStack.current.pop();
+      setText(next);
+      props.showAlert("Redo performed!", "info");
+    }
   };
 
   const findEmails = () => {
     const emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g;
     const matches = text.match(emailRegex);
-
     if (matches) {
       setEmails(matches);
       props.showAlert(`Found Email Addresses!`, 'info');
@@ -47,11 +118,8 @@ export default function TextForm(props) {
     }
   };
 
-  const [text, setText] = useState("");
-  const [emails, setEmails] = useState([]);
-
   return (
-    <>
+    <div>
       <div
         className="container"
         style={{ 
@@ -90,11 +158,11 @@ export default function TextForm(props) {
           justifyContent: "center",
           marginTop: "1.5rem"
         }}>
-          <button className="btn btn-primary" onClick={handleUpClick}>
-            <span style={{ marginRight: "8px" }}>⬆️</span>Uppercase
+          <button className="btn btn-secondary" onClick={handleUndo}>
+            <span style={{ marginRight: "8px" }}>⮪</span>Undo
           </button>
-          <button className="btn btn-primary" onClick={handleLoClick}>
-            <span style={{ marginRight: "8px" }}>⬇️</span>Lowercase
+          <button className="btn btn-secondary" onClick={handleRedo}>
+            <span style={{ marginRight: "8px" }}>⮫</span>Redo
           </button>
           <button className="btn btn-secondary" onClick={handleClearText}>
             <span style={{ marginRight: "8px" }}>🗑️</span>Clear
@@ -102,11 +170,26 @@ export default function TextForm(props) {
           <button className="btn btn-secondary" onClick={handleCopy}>
             <span style={{ marginRight: "8px" }}>📋</span>Copy
           </button>
-          <button className="btn btn-primary" onClick={handleExtraSpace}>
-            <span style={{ marginRight: "8px" }}>✨</span>Remove Spaces
+          <button className="btn btn-secondary" onClick={handleRemoveComments}>
+            <span style={{ marginRight: "8px" }}>🗑️</span>Remove Code Comments
           </button>
           <button className="btn btn-secondary" onClick={findEmails}>
             <span style={{ marginRight: "8px" }}>📧</span>Find Emails
+          </button>
+          <button className="btn btn-primary" onClick={handleUpClick}>
+            <span style={{ marginRight: "8px" }}>⬆️</span>Uppercase
+          </button>
+          <button className="btn btn-primary" onClick={handleLoClick}>
+            <span style={{ marginRight: "8px" }}>⬇️</span>Lowercase
+          </button>
+          <button className="btn btn-primary" onClick={handleExtraSpace}>
+            <span style={{ marginRight: "8px" }}>✨</span>Remove Spaces
+          </button>
+          <button className="btn btn-primary" onClick={handleRemoveBlankLines}>
+            <span style={{ marginRight: "8px" }}>🧹</span>Remove Blank Lines
+          </button>
+          <button className="btn btn-primary" onClick={handleMinifyCode}>
+            <span style={{ marginRight: "8px" }}>⚡</span>Minify Code
           </button>
         </div>
       </div>
@@ -157,6 +240,16 @@ export default function TextForm(props) {
             <h3 style={{ fontSize: "1.2rem", marginBottom: "0.5rem" }}>Reading Time</h3>
             <p style={{ fontSize: "2rem", fontWeight: "700", margin: 0 }}>
               {Math.ceil(0.008 * text.split(/\s+/).filter((element) => element.length !== 0).length)} min
+            </p>
+          </div>
+          <div className="stat-card" style={{
+            padding: "1.5rem",
+            borderRadius: "15px",
+            background: props.mode === "dark" ? "rgba(52, 152, 219, 0.2)" : "rgba(44, 62, 80, 0.1)"
+          }}>
+            <h3 style={{ fontSize: "1.2rem", marginBottom: "0.5rem" }}>Total Lines</h3>
+            <p style={{ fontSize: "2rem", fontWeight: "700", margin: 0 }}>
+              {text ? text.split(/\r\n|\r|\n/).length : 0}
             </p>
           </div>
         </div>
@@ -217,6 +310,6 @@ export default function TextForm(props) {
           </ul>
         </div>
       )}
-    </>
+    </div>
   );
 }
