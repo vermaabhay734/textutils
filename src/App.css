@@ -1,38 +1,376 @@
-.App {
-  text-align: center;
+/* Modern Premium Theme */
+:root {
+  /* Light Theme Colors */
+  --primary-light: #2563eb;
+  --secondary-light: #1d4ed8;
+  --background-light: #f0f4f8;
+  --surface-light: #ffffff;
+  --text-primary-light: #1e293b;
+  --text-secondary-light: #475569;
+  --border-light: rgba(0, 0, 0, 0.1);
+  
+  /* Dark Theme Colors */
+  --primary-dark: #60a5fa;
+  --secondary-dark: #3b82f6;
+  --background-dark: #0f172a;
+  --surface-dark: #1e293b;
+  --text-primary-dark: #f8fafc;
+  --text-secondary-dark: #cbd5e1;
+  --border-dark: rgba(255, 255, 255, 0.1);
+
+  /* Common Colors */
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --info: #3b82f6;
+
+  /* Gradients */
+  --gradient-primary-light: linear-gradient(135deg, #2563eb, #1d4ed8);
+  --gradient-secondary-light: linear-gradient(135deg, #f0f4f8, #ffffff);
+  --gradient-primary-dark: linear-gradient(135deg, #60a5fa, #3b82f6);
+  --gradient-secondary-dark: linear-gradient(135deg, #1e293b, #0f172a);
+  
+  /* Effects */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-primary-light: 0 5px 15px rgba(37, 99, 235, 0.2);
+  --shadow-primary-dark: 0 5px 15px rgba(96, 165, 250, 0.2);
+
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Global Styles */
+body {
+  font-family: 'Poppins', sans-serif;
+  transition: var(--transition-normal);
+  margin: 0;
+  padding: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* Improved Button Styles */
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  transition: var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+  border: none;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+/* Primary Button */
+.btn-primary {
+  background: var(--gradient-primary-light);
+  color: white;
+  box-shadow: var(--shadow-primary-light);
+}
+
+[data-theme='dark'] .btn-primary {
+  background: var(--gradient-primary-dark);
+  box-shadow: var(--shadow-primary-dark);
+}
+
+/* Secondary Button */
+.btn-secondary {
+  background: var(--surface-light);
+  color: var(--text-primary-light);
+  border: 1px solid var(--border-light);
+}
+
+[data-theme='dark'] .btn-secondary {
+  background: var(--surface-dark);
+  color: var(--text-primary-dark);
+  border: 1px solid var(--border-dark);
+}
+
+/* Container Styles */
+.container {
+  background: var(--surface-light);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: var(--shadow-lg);
+  transition: var(--transition-normal);
+}
+
+[data-theme='dark'] .container {
+  background: var(--surface-dark);
+}
+
+/* Form Controls */
+.form-control {
+  background: var(--background-light);
+  color: var(--text-primary-light);
+  border: 2px solid var(--border-light);
+  border-radius: 12px;
+  padding: 1rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  transition: var(--transition-normal);
+}
+
+[data-theme='dark'] .form-control {
+  background: var(--background-dark);
+  color: var(--text-primary-dark);
+  border-color: var(--border-dark);
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--primary-light);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+[data-theme='dark'] .form-control:focus {
+  border-color: var(--primary-dark);
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary-light);
+  margin-bottom: 1rem;
+}
+
+[data-theme='dark'] h1,
+[data-theme='dark'] h2,
+[data-theme='dark'] h3,
+[data-theme='dark'] h4,
+[data-theme='dark'] h5,
+[data-theme='dark'] h6 {
+  color: var(--text-primary-dark);
+}
+
+/* Links */
+a {
+  color: var(--primary-light);
+  text-decoration: none;
+  transition: var(--transition-fast);
+}
+
+[data-theme='dark'] a {
+  color: var(--primary-dark);
+}
+
+a:hover {
+  opacity: 0.8;
+}
+
+/* Global Styles */
+body {
+  font-family: 'Poppins', sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin: 0;
+  padding: 0;
+}
+
+/* Navbar Styles */
+.navbar {
+  padding: 1rem 2rem !important;
+  box-shadow: 0 2px 10px var(--shadow-color);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.navbar-brand {
+  font-weight: 700;
+  font-size: 1.5rem !important;
+  background: var(--gradient-dark);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Dark Mode Switch */
+.form-check-input {
+  width: 3rem !important;
+  height: 1.5rem !important;
+  border-radius: 1rem !important;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Container Styles */
+.container {
+  padding: 2rem;
+  border-radius: 15px;
+  transition: all 0.3s ease;
+}
+
+/* TextForm Styles */
+textarea.form-control {
+  border-radius: 12px;
+  border: 2px solid var(--shadow-color);
+  padding: 1rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  resize: vertical;
+  min-height: 200px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px var(--shadow-color);
+}
+
+textarea.form-control:focus {
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+}
+
+/* Button Styles */
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  margin: 0.5rem;
+  border: none;
+  box-shadow: var(--shadow-primary);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn:hover::after {
+  opacity: 1;
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-primary {
+  background: var(--gradient-primary-light);
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+[data-theme='dark'] .btn-primary {
+  background: var(--gradient-primary-dark);
 }
 
-@keyframes App-logo-spin {
+/* Alert Styles */
+.alert {
+  border-radius: 10px;
+  padding: 1rem 1.5rem;
+  margin: 1rem 0;
+  border: none;
+  box-shadow: 0 4px 6px var(--shadow-color);
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
   from {
-    transform: rotate(0deg);
+    transform: translateY(-20px);
+    opacity: 0;
   }
   to {
-    transform: rotate(360deg);
+    transform: translateY(0);
+    opacity: 1;
   }
+}
+
+/* Text Summary Section */
+.text-summary {
+  background: var(--gradient-light);
+  padding: 2rem;
+  border-radius: 15px;
+  margin-top: 2rem;
+  box-shadow: 0 4px 6px var(--shadow-color);
+}
+
+/* Dark Mode Styles */
+[data-theme='dark'] {
+  background-color: var(--background-dark);
+  color: var(--text-light);
+}
+
+[data-theme='dark'] .navbar {
+  background-color: rgba(26, 26, 26, 0.8);
+}
+
+[data-theme='dark'] textarea.form-control {
+  background-color: #2c3e50;
+  color: var(--text-light);
+  border-color: #34495e;
+}
+
+[data-theme='dark'] .text-summary {
+  background: var(--gradient-dark);
+  color: var(--text-light);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  
+  .btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    margin: 0.3rem;
+  }
+  
+  textarea.form-control {
+    min-height: 150px;
+  }
+}
+
+/* Email List Styles */
+.email-list {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px var(--shadow-color);
+}
+
+.email-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.email-list li {
+  padding: 0.75rem 1rem;
+  margin: 0.5rem 0;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.email-list li:hover {
+  transform: translateX(10px);
+  background: rgba(255, 255, 255, 0.1);
 }
