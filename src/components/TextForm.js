@@ -10,6 +10,22 @@ export default function TextForm(props) {
     return out;
   }
 
+  // Remove SQL comments: single-line '--' and multi-line '/* ... */'
+  function removeSqlComments(str) {
+    if (!str) return str;
+    // Remove multi-line comments first
+    let out = str.replace(/\/\*[\s\S]*?\*\//gm, "");
+    // Remove single-line comments starting with -- until end of line
+    out = out.replace(/--.*$/gm, "");
+    // Trim trailing whitespace on each line and remove empty lines
+    out = out
+      .split(/\r?\n/)
+      .map((line) => line.replace(/[ \t]+$/g, ""))
+      .filter((line) => line.trim() !== "")
+      .join("\n");
+    return out;
+  }
+
   function minifyCode(str) {
     let out = removeCodeComments(str);
     out = out.replace(/\s+/g, " ");
@@ -77,6 +93,14 @@ export default function TextForm(props) {
     const newText = removeCodeComments(text);
     setText(newText);
     props.showAlert("Code comments removed!", "success");
+    redoStack.current = [];
+  };
+
+  const handleRemoveSqlComments = () => {
+    undoStack.current.push(text);
+    const newText = removeSqlComments(text);
+    setText(newText);
+    props.showAlert("SQL comments removed!", "success");
     redoStack.current = [];
   };
 
@@ -172,6 +196,9 @@ export default function TextForm(props) {
           </button>
           <button className="btn btn-secondary" onClick={handleRemoveComments}>
             <span style={{ marginRight: "8px" }}>🗑️</span>Remove Code Comments
+          </button>
+          <button className="btn btn-secondary" onClick={handleRemoveSqlComments}>
+            <span style={{ marginRight: "8px" }}>🧾</span>Remove SQL Comments
           </button>
           <button className="btn btn-secondary" onClick={findEmails}>
             <span style={{ marginRight: "8px" }}>📧</span>Find Emails
