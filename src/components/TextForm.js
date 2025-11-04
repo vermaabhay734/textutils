@@ -146,13 +146,13 @@ export default function TextForm(props) {
     <div>
       <div
         className="container"
-        style={{ 
+        style={{
           marginTop: "2rem",
           border: `1px solid ${props.mode === "dark" ? "var(--border-dark)" : "var(--border-light)"}`,
         }}
       >
-        <h1 style={{ 
-          fontSize: "2.5rem", 
+        <h1 style={{
+          fontSize: "2.5rem",
           fontWeight: "700",
           marginBottom: "1.5rem",
           background: props.mode === "dark" ? "linear-gradient(135deg, #ecf0f1, #bdc3c7)" : "linear-gradient(135deg, #2c3e50, #3498db)",
@@ -222,7 +222,7 @@ export default function TextForm(props) {
       </div>
       <div
         className="container my-4 text-summary"
-        style={{ 
+        style={{
           color: props.mode === "dark" ? "white" : "#042743",
           backgroundColor: props.mode === "dark" ? "rgba(26, 26, 26, 0.8)" : "rgba(255, 255, 255, 0.8)",
           borderRadius: "20px",
@@ -230,8 +230,8 @@ export default function TextForm(props) {
           boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)"
         }}
       >
-        <h2 style={{ 
-          fontSize: "2rem", 
+        <h2 style={{
+          fontSize: "2rem",
           fontWeight: "600",
           marginBottom: "1rem"
         }}>Text Summary</h2>
@@ -287,7 +287,7 @@ export default function TextForm(props) {
           background: props.mode === "dark" ? "rgba(52, 152, 219, 0.1)" : "rgba(44, 62, 80, 0.05)"
         }}>
           <h2 style={{ marginBottom: "1rem" }}>Preview</h2>
-          <p style={{ 
+          <p style={{
             fontSize: "1.1rem",
             lineHeight: "1.6",
             opacity: text.length > 0 ? 1 : 0.7
@@ -299,7 +299,7 @@ export default function TextForm(props) {
       {emails.length > 0 && (
         <div
           className="container my-4 email-list"
-          style={{ 
+          style={{
             color: props.mode === "dark" ? "white" : "#042743",
             backgroundColor: props.mode === "dark" ? "rgba(26, 26, 26, 0.8)" : "rgba(255, 255, 255, 0.8)",
             borderRadius: "20px",
@@ -307,8 +307,8 @@ export default function TextForm(props) {
             boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)"
           }}
         >
-          <h2 style={{ 
-            fontSize: "2rem", 
+          <h2 style={{
+            fontSize: "2rem",
             fontWeight: "600",
             marginBottom: "1.5rem"
           }}>Found Email Addresses</h2>
@@ -319,7 +319,7 @@ export default function TextForm(props) {
             gap: "1rem"
           }}>
             {emails.map((email, index) => (
-              <li 
+              <li
                 key={index}
                 style={{
                   padding: "1rem 1.5rem",
