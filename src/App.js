@@ -4,8 +4,12 @@ import Alert from "./components/Alert";
 // import About from './components/About';
 import Navbar from "./components/Navbar";
 import TextForm from "./components/TextForm";
+import CompareText from "./components/CompareText";
+import CompareRoute from "./routes/CompareRoute.tsx";
 import Footer from "./components/Footer";
 import React, { useState } from "react";
+
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
   const [mode, setMode] = useState("light");
@@ -38,22 +42,23 @@ function App() {
   };
 
   return (
-    <div style={{ 
-      minHeight: '100vh',
-      display: 'flex',
-      flexDirection: 'column'
-    }}>
-      <Navbar title="TextUtils" mode={mode} toggleMode={toggleMode} />
-      <Alert alert={alert} />
-      <div className="container my-3" style={{ flex: 1 }}>
-        <TextForm
-          heading="Enter the text to Analyze below:"
-          mode={mode}
-          showAlert={showAlert}
-        />
+    <Router>
+      <div style={{ 
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column'
+      }}>
+        <Navbar title="TextUtils" mode={mode} toggleMode={toggleMode} />
+        <Alert alert={alert} />
+        <div className="container my-3" style={{ flex: 1 }}>
+          <Routes>
+            <Route path="/" element={<TextForm heading="Enter the text to Analyze below:" mode={mode} showAlert={showAlert} />} />
+            <Route path="/compare" element={<CompareRoute />} />
+          </Routes>
+        </div>
+        <Footer mode={mode} />
       </div>
-      <Footer mode={mode} />
-    </div>
+    </Router>
   );
 }
 

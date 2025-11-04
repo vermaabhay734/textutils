@@ -43,9 +43,24 @@ export default function Navbar(props) {
                 fontWeight: '500',
                 padding: '0.5rem 1rem',
                 borderRadius: '8px',
-                transition: 'all 0.3s ease'
+                transition: 'all 0.3s ease',
+                marginRight: '0.5rem'
               }}>
                 Home
+              </a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="/compare" style={{
+                fontSize: '1.1rem',
+                fontWeight: '500',
+                padding: '0.5rem 1rem',
+                borderRadius: '8px',
+                transition: 'all 0.3s ease',
+                background: 'var(--primary-light)',
+                color: '#fff',
+                marginRight: '0.5rem'
+              }}>
+                Compare Text
               </a>
             </li>
           </ul>
