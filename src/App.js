@@ -41,8 +41,8 @@ function App() {
     }
   };
 
-  return (
-    <Router>
+    return (
+      <Router basename="/textutils">
       <div style={{ 
         minHeight: '100vh',
         display: 'flex',
