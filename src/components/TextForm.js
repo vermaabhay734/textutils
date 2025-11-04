@@ -11,13 +11,10 @@ export default function TextForm(props) {
   }
 
   // Remove SQL comments: single-line '--' and multi-line '/* ... */'
-  function removeSqlComments(str) {
+  function removeSqlCommentsLocal(str) {
     if (!str) return str;
-    // Remove multi-line comments first
     let out = str.replace(/\/\*[\s\S]*?\*\//gm, "");
-    // Remove single-line comments starting with -- until end of line
     out = out.replace(/--.*$/gm, "");
-    // Trim trailing whitespace on each line and remove empty lines
     out = out
       .split(/\r?\n/)
       .map((line) => line.replace(/[ \t]+$/g, ""))
@@ -25,6 +22,89 @@ export default function TextForm(props) {
       .join("\n");
     return out;
   }
+
+  // Lightweight, safer SQL formatter kept inline to avoid module parse issues.
+  function formatSqlQueryLocal(input) {
+    if (!input) return input;
+    // Mask single-quoted strings (handles doubled single quotes '')
+    const strings = [];
+    const masked = input.replace(/'(?:[^']|'')*'/g, (m) => {
+      const key = `__STR${strings.length}__`;
+      strings.push(m);
+      return key;
+    });
+
+    // Normalize whitespace (compact spaces, we'll preserve newlines later)
+    let s = masked.replace(/\s+/g, ' ').trim();
+
+    const kws = [
+      'SELECT', 'FROM', 'WHERE', 'ORDER BY', 'GROUP BY', 'HAVING', 'LIMIT', 'OFFSET', 'JOIN', 'INNER JOIN', 'LEFT JOIN', 'RIGHT JOIN', 'FULL JOIN', 'CROSS JOIN', 'ON', 'INSERT INTO', 'VALUES', 'UPDATE', 'SET', 'DELETE', 'UNION'
+    ];
+
+    // Uppercase keywords first (multi-word first), then insert newline before them
+    kws.sort((a,b) => b.length - a.length).forEach(kw => {
+      const pat = kw.split(' ').join('\\s+');
+      const re = new RegExp('\\b' + pat + '\\b', 'gi');
+      s = s.replace(re, kw);
+    });
+    const kwsPattern = kws.map(k => k.replace(/ /g, '\\s+')).join('|');
+    s = s.replace(new RegExp('\\b(' + kwsPattern + ')\\b', 'g'), '\n$1');
+
+    // Ensure spaces around operators but preserve newlines
+    s = s.replace(/([<>!=]=?|=)/g, ' $1 ').replace(/[ \t]+/g, ' ').trim();
+
+    // Split into lines and format
+    const lines = s.split(/\n+/).map(l => l.trim()).filter(Boolean);
+    const out = [];
+    lines.forEach(line => {
+      if (/^SELECT\b/i.test(line)) {
+        const rest = line.replace(/^SELECT\b/i, '').trim();
+        out.push('SELECT');
+        if (rest) {
+          const cols = rest.split(',').map(c => c.trim()).filter(Boolean);
+          cols.forEach((c, i) => out.push('  ' + c + (i === cols.length -1 ? '' : ',')));
+        }
+      } else {
+        const kwMatch = line.match(/^(SELECT|FROM|WHERE|ORDER BY|GROUP BY|HAVING|LIMIT|OFFSET|VALUES|SET|INSERT INTO|UPDATE|DELETE|UNION|INNER JOIN|LEFT JOIN|RIGHT JOIN|FULL JOIN|CROSS JOIN|JOIN|ON)\b/i);
+        if (kwMatch) {
+          const kw = kwMatch[1].toUpperCase();
+          const rest = line.slice(kwMatch[1].length).trim();
+          if (rest) {
+            out.push(kw);
+            out.push('  ' + rest);
+          } else {
+            out.push(kw);
+          }
+        } else {
+          out.push(line);
+        }
+      }
+    });
+
+    // Simple parentheses-based indentation
+    const final = [];
+    let depth = 0;
+    out.forEach(line => {
+      if (/^\)/.test(line)) depth = Math.max(0, depth - 1);
+      final.push('  '.repeat(depth) + line);
+      const opens = (line.match(/\(/g) || []).length;
+      const closes = (line.match(/\)/g) || []).length;
+      depth += opens - closes;
+      if (depth < 0) depth = 0;
+    });
+
+    let result = final.join('\n');
+    // restore strings
+    strings.forEach((st, idx) => {
+      result = result.replace(new RegExp(`__STR${idx}__`, 'g'), st);
+    });
+
+    // preserve trailing semicolon
+    if (/;\s*$/.test(input.trim()) && !/;\s*$/.test(result)) result = result.trim() + ';';
+
+    return result.trim();
+  }
+
 
   function minifyCode(str) {
     let out = removeCodeComments(str);
@@ -98,9 +178,17 @@ export default function TextForm(props) {
 
   const handleRemoveSqlComments = () => {
     undoStack.current.push(text);
-    const newText = removeSqlComments(text);
+    const newText = removeSqlCommentsLocal(text);
     setText(newText);
     props.showAlert("SQL comments removed!", "success");
+    redoStack.current = [];
+  };
+
+  const handleBeautifySql = () => {
+    undoStack.current.push(text);
+    const newText = formatSqlQueryLocal(text);
+    setText(newText);
+    props.showAlert("SQL formatted successfully!", "success");
     redoStack.current = [];
   };
 
@@ -199,6 +287,9 @@ export default function TextForm(props) {
           </button>
           <button className="btn btn-secondary" onClick={handleRemoveSqlComments}>
             <span style={{ marginRight: "8px" }}>🧾</span>Remove SQL Comments
+          </button>
+          <button className="btn btn-secondary" onClick={handleBeautifySql}>
+            <span style={{ marginRight: "8px" }}>🎨</span>Beautify SQL
           </button>
           <button className="btn btn-secondary" onClick={findEmails}>
             <span style={{ marginRight: "8px" }}>📧</span>Find Emails
