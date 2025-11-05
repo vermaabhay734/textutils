@@ -1,3 +1,56 @@
+# Deploying to GitHub Pages (SPA)
+
+This project is a React Single Page Application (SPA) deployed to GitHub Pages at:
+https://vermaabhay734.github.io/textutils/
+
+## Key Steps
+
+1. **Router Setup**
+  - Uses `<BrowserRouter basename="/textutils">` in production (GH Pages), and no basename in local dev.
+  - Dynamic basename is set in `App.js`:
+    ```js
+    const isGhPages = window.location.hostname.endsWith("github.io");
+    const base = isGhPages ? "/textutils" : undefined;
+    <BrowserRouter {...(base ? { basename: base } : {})}> ... </BrowserRouter>
+    ```
+
+2. **Navigation**
+  - All internal navigation uses React Router `<Link to="...">`.
+  - No anchor tags for internal routes.
+  - Route paths are relative (e.g., `compare`, not `/compare`).
+
+3. **404.html SPA Fallback**
+  - After building, `index.html` is copied to `404.html` in the `build` folder.
+  - This ensures deep links (e.g., `/textutils/compare`) load the SPA, not a hard 404.
+  - Automated by the postbuild script: `sh ./scripts/copy404.sh`
+
+4. **package.json homepage**
+  - Set to `"homepage": "https://vermaabhay734.github.io/textutils"` for correct asset paths.
+
+5. **Catch-all Route**
+  - A catch-all route (`*`) renders a redirect to Home via `NotFoundRedirect`.
+  - This prevents hard 404s and keeps navigation inside the SPA.
+
+## Manual Test Checklist
+
+- [x] Home page loads at `/textutils/`
+- [x] Compare page loads at `/textutils/compare` via SPA navigation
+- [x] Refresh on `/textutils/compare` loads Compare page (no GH Pages 404)
+- [x] Browser Back/Forward works, state preserved
+- [x] All static assets load from `/textutils/...` paths
+- [x] No hard reloads or anchor tag navigation for internal routes
+- [x] 404.html is present in the published site root
+
+## Deploy Steps
+
+1. Run `npm run deploy` (or your deploy workflow)
+2. Confirm `build/404.html` exists before pushing to `gh-pages` branch
+3. Visit `/textutils/compare` and refresh to confirm SPA loads
+
+## Troubleshooting
+- If you see a hard 404 on deep links, ensure `404.html` is present and matches `index.html` in the published directory.
+- If assets fail to load, check the `homepage` field in `package.json`.
+- For custom domains, adjust `basename` and asset paths accordingly.
 # TextUtils Deployment Guide 📦
 
 This guide provides step-by-step instructions for deploying TextUtils to different platforms.

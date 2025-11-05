@@ -10,6 +10,7 @@ import Footer from "./components/Footer";
 import React, { useState } from "react";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import NotFoundRedirect from "./components/NotFoundRedirect";
 
 function App() {
   const [mode, setMode] = useState("light");
@@ -41,8 +42,12 @@ function App() {
     }
   };
 
-    return (
-      <Router basename="/textutils">
+  // Dynamic basename for GH Pages
+  const isGhPages = window.location.hostname.endsWith("github.io");
+  const base = isGhPages ? "/textutils" : undefined;
+
+  return (
+    <Router {...(base ? { basename: base } : {})}>
       <div style={{ 
         minHeight: '100vh',
         display: 'flex',
@@ -52,8 +57,9 @@ function App() {
         <Alert alert={alert} />
         <div className="container my-3" style={{ flex: 1 }}>
           <Routes>
-            <Route path="/" element={<TextForm heading="Enter the text to Analyze below:" mode={mode} showAlert={showAlert} />} />
-            <Route path="/compare" element={<CompareRoute />} />
+            <Route path="" element={<TextForm heading="Enter the text to Analyze below:" mode={mode} showAlert={showAlert} />} />
+            <Route path="compare" element={<CompareRoute />} />
+            <Route path="*" element={<NotFoundRedirect />} />
           </Routes>
         </div>
         <Footer mode={mode} />
