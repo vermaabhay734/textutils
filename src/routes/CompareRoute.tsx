@@ -145,7 +145,7 @@ export default function CompareRoute() {
             lineNumbers={true}
             value={left}
             onChange={e => setLeft(e.target.value)}
-            contentEditable={true}
+            contentEditable={!hasCompared}
             minimapMarkers={[]}
           />
         </div>
@@ -156,7 +156,7 @@ export default function CompareRoute() {
             lineNumbers={true}
             value={right}
             onChange={e => setRight(e.target.value)}
-            contentEditable={true}
+            contentEditable={!hasCompared}
             minimapMarkers={[]}
           />
         </div>
